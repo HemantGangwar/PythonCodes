@@ -1,0 +1,21 @@
+=============> 0. Creating more than one profiles
+
+$ cat ~/.aws/credentials 
+[default]
+aws_access_key_id = AKIAY4NA3JDSL6G4T44B
+aws_secret_access_key = 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
+
+[devs]
+aws_access_key_id = AKIAY4NA3JDSGX7EKU57
+aws_secret_access_key = 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
+
+===============> 1. Displaying session
+
+import boto3
+
+aws_dev_console = boto3.session.Session(profile_name="devs")
+
+x = dir(aws_dev_console)
+
+print(x)
+

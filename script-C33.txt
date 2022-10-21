@@ -1,0 +1,38 @@
+1. A basic introcution to usage of timedelta
+
+#!/usr/bin/env python3
+
+from datetime import timedelta
+
+year = timedelta(days=365)
+ten_years = 10 * year
+
+nine_years = ten_years - year
+print(nine_years)
+
+one_third = ten_years // 3
+print(one_third)
+
+2. A use case to identify total seconds ina duration or time delta calculation
+
+total_sec = timedelta.total_seconds(ten_years)
+print(total_sec)
+
+3. Understand that arguments besides days, seconds and microseconds are “merged” .
+
+
+#!/usr/bin/env python3
+
+from datetime import timedelta
+
+delta = timedelta(
+        days=50,
+        seconds=27,
+        microseconds=10,
+        milliseconds=29000,
+        minutes=5,
+        hours=8,
+        weeks=2
+        )
+
+print(delta)

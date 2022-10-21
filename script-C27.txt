@@ -1,0 +1,196 @@
+1. Making basic connection
+
+#!/usr/bin/env python3
+import shutup;shutup.please()
+import paramiko
+
+''' Creating SSH Connections '''
+
+custom_SSH_Client = paramiko.SSHClient()
+custom_SSH_Client.connect(hostname='backbone.hemu.com', username='root', password='redhat')
+stdin, stdout, stderr = custom_SSH_Client.exec_command('hostname')
+
+print(f"Hostname is : ", stdout.read().decode())
+custom_SSH_Client.close()
+
+Expected Error: paramiko.ssh_exception.SSHException: Server 'backbone.hemu.com' not found in known_hosts
+
+custom_SSH_Client = paramiko.SSHClient()
+custom_SSH_Client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+custom_SSH_Client.connect(hostname='backbone.hemu.com', username='root', password='redhat')
+stdin, stdout, stderr = custom_SSH_Client.exec_command('hostname')
+
+2. Defining variables rather than hard-coding the stuff
+
+#!/usr/bin/env python3
+import shutup;shutup.please()
+import paramiko
+
+''' Defining Variables '''
+
+hostdetails = "backbone.hemu.com"
+userdetails  = "root"
+passworddetails = "redhat"
+
+
+''' Creating SSH Connections '''
+
+custom_SSH_Client = paramiko.SSHClient()
+custom_SSH_Client.set_missing_host_key_policy(paramiko.WarningPolicy())
+custom_SSH_Client.connect(hostname=hostdetails, username=userdetails, password=passworddetails)
+stdin, stdout, stderr = custom_SSH_Client.exec_command('hostname')
+
+print(f"Hostname is : ", stdout.read().decode())
+custom_SSH_Client.close()
+
+3. Using pre-loaded system keys
+
+#!/usr/bin/env python3
+import shutup;shutup.please()
+import paramiko
+
+''' Defining Variables '''
+
+hostdetails = "backbone.hemu.com"
+userdetails  = "root"
+passworddetails = "redhat"
+
+
+''' Creating SSH Connections '''
+
+custom_SSH_Client = paramiko.SSHClient()
+custom_SSH_Client.load_system_host_keys()
+custom_SSH_Client.connect(hostname=hostdetails, username=userdetails, password=passworddetails)
+stdin, stdout, stderr = custom_SSH_Client.exec_command('hostname')
+
+print(f"Hostname is : ", stdout.read().decode())
+custom_SSH_Client.close()
+
+Display a testing by hostkeys located at some user's end
+
+#custom_SSH_Client.load_host_keys('/home/ansible/.ssh/known_hosts')
+
+4. Executing more than one commands - Put then inside a list or provide from a file in previous examples and then invoke exec_command function in a loop
+
+#!/usr/bin/env python3
+import shutup;shutup.please()
+import paramiko
+
+# Adding commands in list #
+commands = [
+    "uname -a",
+    "df -h",
+    "date",
+    "cat /etc/motd"
+]
+
+
+''' Defining Variables '''
+
+hostdetails = "backbone.hemu.com"
+userdetails  = "root"
+passworddetails = "redhat"
+
+
+''' Creating SSH Connections '''
+
+custom_SSH_Client = paramiko.SSHClient()
+custom_SSH_Client.load_system_host_keys()
+custom_SSH_Client.connect(hostname=hostdetails, username=userdetails, password=passworddetails)
+
+# Creating for loop to traverse over commands list #
+# Adding some formatting option
+for command in commands:
+    print(f"{'='*10}  {command} {'='*10}")
+    stdin, stdout, stderr = custom_SSH_Client.exec_command(command)
+    print(stdout.read().decode())
+
+
+custom_SSH_Client.close()
+
+5. Small update to incorporate any errors as well
+
+#!/usr/bin/env python3
+import shutup;shutup.please()
+import paramiko
+
+# Adding commands in list #
+commands = [
+    "uname -a",
+    "df -h",
+    "date",
+    "mycommand",
+    "cat /etc/motd"
+]
+
+
+''' Defining Variables '''
+
+hostdetails = "backbone.hemu.com"
+userdetails  = "root"
+passworddetails = "redhat"
+
+
+''' Creating SSH Connections '''
+
+custom_SSH_Client = paramiko.SSHClient()
+custom_SSH_Client.load_system_host_keys()
+custom_SSH_Client.connect(hostname=hostdetails, username=userdetails, password=passworddetails)
+
+
+# Creating for loop to traverse over commands list #
+# Adding some formatting option
+for command in commands:
+    print(f"{'='*10}  {command} {'='*10}")
+    stdin, stdout, stderr = custom_SSH_Client.exec_command(command)
+    print(stdout.read().decode())
+    err = stderr.read().decode()
+    if err:
+        print(err)
+
+
+custom_SSH_Client.close()
+
+6. Till now we were using exec_command which Execute a command on the SSH server. A new Channel is opened and the requested command is executed. The command’s input and output streams are returned as Python file-like objects representing stdin, stdout, and stderr. This time we will open invoke_shell
+
+#!/usr/bin/env python3
+import shutup;shutup.please()
+import paramiko
+import time
+
+# Adding commands in list #
+commands = [
+    "uname -a",
+    "df -h",
+    "date",
+    "mycommand",
+    "cat /etc/motd"
+]
+
+
+''' Defining Variables '''
+
+hostdetails = "backbone.hemu.com"
+userdetails  = "root"
+passworddetails = "redhat"
+
+
+''' Creating SSH Connections '''
+
+custom_SSH_Client = paramiko.SSHClient()
+custom_SSH_Client.load_system_host_keys()
+custom_SSH_Client.connect(hostname=hostdetails, username=userdetails, password=passworddetails)
+DEVICE_ACCESS = custom_SSH_Client.invoke_shell()
+
+# Creating for loop to traverse over commands list #
+# Adding some formatting option
+for command in commands:
+#    print(f"{'='*10}  {command} {'='*10}")
+    DEVICE_ACCESS.send(f"{command}\n")
+    time.sleep(1)
+    output = DEVICE_ACCESS.recv(9999)
+    print(output.decode(), end='')
+
+custom_SSH_Client.close()
+
+

@@ -1,0 +1,49 @@
+(A) Displaying what all services are manageable by resources
+
+print(aws_dev_console.get_available_resources())
+
+(B) Writing a sample code creating EC2 instance
+
+import boto3
+
+aws_dev_console = boto3.session.Session(profile_name="devs")
+
+x = dir(aws_dev_console)
+
+ec2_ops = aws_dev_console.resource('ec2', region_name = "ap-south-1")
+
+print(dir(ec2_ops))
+
+(C) Create EC2 using some information
+
+import boto3
+
+# Let's create an EC2 resource
+
+my_custom_ec2 = boto3.resource('ec2')
+
+instances = my_custom_ec2.create_instances(
+        ImageId='ami-00a2ea0777b445307',
+        MinCount=1,
+        MaxCount=1,
+        InstanceType="t2.micro",
+        KeyName='Windows-Key-2022',
+        SecurityGroupIds=['sg-042d32b5ca9656061'],
+        Placement={
+            'AvailabilityZone': 'ap-south-1a',
+            'Tenancy': 'default',
+            },
+        TagSpecifications=[
+        {
+            'ResourceType': 'instance',
+            'Tags': [
+                {
+                    'Key': 'Name',
+                    'Value': 'My_Python-Ec2'
+                },
+            ]
+        },
+        ],
+        )
+
+print(instances)

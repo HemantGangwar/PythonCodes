@@ -1,0 +1,77 @@
+1. A very basic SFTP connection
+
+
+''' Creating SSH Connections '''
+custom_SSH_Client = paramiko.SSHClient()
+custom_SSH_Client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+custom_SSH_Client.connect(hostname='backbone.hemu.com', username='root', password='redhat')
+
+#/* SFTP Operations */
+
+custom_sftp_client = custom_SSH_Client.open_sftp()
+print(dir(custom_sftp_client))
+custom_sftp_client.close()
+
+custom_SSH_Client.close()
+
+2. Putting a file on SFTP server
+
+#/* SFTP Operations */
+
+custom_sftp_client = custom_SSH_Client.open_sftp()
+custom_sftp_client.put('commandList.txt', '/home/ansible/command.txt')
+custom_sftp_client.close()
+
+custom_SSH_Client.close()
+
+
+3. Fetching a file from SFTP server
+
+#/* SFTP Operations */
+
+custom_sftp_client = custom_SSH_Client.open_sftp()
+custom_sftp_client.chdir('/home/ansible/')
+custom_sftp_client.get('Files.zip', '/root/codes/Files.zip')
+custom_sftp_client.close()
+
+custom_SSH_Client.close()
+
+4. Stats of a file
+
+#/* SFTP Operations */
+
+custom_sftp_client = custom_SSH_Client.open_sftp()
+x = custom_sftp_client.stat('/home/ansible/command.txt')
+print(x)
+custom_sftp_client.close()
+
+custom_SSH_Client.close()
+
+#!/usr/bin/env python3
+
+import shutup;shutup.please()
+import paramiko, time
+
+''' Creating SSH Connections '''
+custom_SSH_Client = paramiko.SSHClient()
+custom_SSH_Client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+custom_SSH_Client.connect(hostname='backbone.hemu.com', username='root', password='redhat')
+
+custom_sftp_client = custom_SSH_Client.open_sftp()
+custom_sftp_client.put('linux_logs_capture.sh', '/var/tmp/linux_logs_capture.sh')
+custom_sftp_client.chmod('/var/tmp/linux_logs_capture.sh', 0o755)
+custom_sftp_client.close()
+
+stdin, stdout, stderr = custom_SSH_Client.exec_command('/usr/bin/sh /var/tmp/linux_logs_capture.sh')
+print(stdout.read().decode())
+
+custom_sftp_client = custom_SSH_Client.open_sftp()
+custom_sftp_client.get('/var/tmp/backbone.hemu.com.hardwarelogs.txt', 'backbone.hemu.com.hardwarelogs.txt')
+custom_sftp_client.close()
+
+custom_SSH_Client.close()
+
+
+
+
+

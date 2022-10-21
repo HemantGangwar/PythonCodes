@@ -1,0 +1,31 @@
+1. Creating S3 bucket using client object
+
+import boto3
+
+aws_dev_console = boto3.session.Session(profile_name="devs")
+
+s3_ops = aws_dev_console.client('s3', region_name = "ap-south-1")
+bucket = s3_ops.create_bucket(Bucket='my-python.bucket',
+                              CreateBucketConfiguration={'LocationConstraint': 'ap-south-1'}
+                                )
+print(bucket)
+
+2. Describing an instance state
+
+my_custom_ec2 = boto3.client('ec2')
+
+response = my_custom_ec2.describe_instances(
+        InstanceIds=['i-040c5a610ad51c7f2'],
+        )
+
+print(response)
+
+3. Stopping an instance
+
+my_custom_ec2 = boto3.client('ec2')
+
+response = my_custom_ec2.stop_instances(
+        InstanceIds=['i-040c5a610ad51c7f2'],
+        )
+
+print(response)

@@ -1,0 +1,38 @@
+1. Import required class from the datetime module
+
+#!/usr/bin/env python3
+from datetime import date
+
+2. Return the current local date. 
+
+print(date.today())
+
+3. Return a date corresponding to a date_string given in the format YYYY-MM-DD
+
+4. Printing maximum date
+
+d = date.max
+print(d)
+
+5. Printing a custom date provided
+
+d = date(2021, 12, 20)
+print(d)
+
+6. Accessing the year, month, and date attribute from the date class
+
+d = date(2021, 12, 20)
+print("Year: ", d.year)
+print("Month: ",  d.month)
+print("Day: ", d.day)
+
+7. Return a string representing the date:
+
+d = date(2021, 12, 20)
+print("Current time: ", d.ctime())
+
+8. String representing the date, controlled by an explicit format string.
+
+d = date(2021, 12, 20)
+print("Formatted Date: ", d.strftime("%d/%m/%y"))
+

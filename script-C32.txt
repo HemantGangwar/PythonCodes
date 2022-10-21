@@ -1,0 +1,38 @@
+1. Importing the object from module
+
+#!/usr/bin/env python3
+from datetime import datetime
+
+2. Printing  current local date and time.
+
+d = datetime.now()
+print(d)
+
+3. Return the current UTC date and time, with tzinfo None.
+
+d = datetime.utcnow()
+print(d)
+
+4. Retrieving attributes of date and time
+
+d = datetime.now()
+print("Current date & Time: ", d)
+print("Current Year: ", d.year)
+print("Current Month: ", d.month)
+print("Current Day: ", d.day)
+print("Current Hour: ", d.hour)
+print("Current Minute: ", d.minute)
+print("Current Second: ", d.second)
+
+5. Creating an instance of DateTime class
+
+d = datetime(2022, 11, 27)
+print(d)
+d = datetime(2022, 11, 27, 11, 59, 23, 6008)
+print(d)
+
+6. Return the local date and time corresponding to the POSIX timestamp
+
+d = datetime.fromtimestamp(2147483647)
+print(d)
+
