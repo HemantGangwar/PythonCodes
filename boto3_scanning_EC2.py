@@ -12,7 +12,6 @@ for regionList in total_regions['Regions']:
     instances = my_custom_ec2s.describe_instances()
     for reservation in instances['Reservations']:
         for instance in reservation['Instances']:
-              print("Instance ID: ", instance['InstanceId'], "," ,"Instance Name: ", instance['Tags'][0]['Value'])
-#              x = instance['Tags'][0]['Value']
-#              print(x)
+            print("Instance ID: ", instance['InstanceId'], "," ,"Instance Name: ", instance['Tags'][0]['Value'], ",", "Instance State: ", instance['State']['Name'])
+              #print("Instance ID: ", instance)
 

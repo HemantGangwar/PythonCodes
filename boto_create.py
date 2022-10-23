@@ -10,8 +10,8 @@ cutom_region = input('''Enter the region where you want to deploy?
                         
 _: ''') 
 
-#aws_dev_console = boto3.session.Session(profile_name="mypc")
-my_custom_ec2 = boto3.resource('ec2', region_name = cutom_region)
+aws_dev_console = boto3.session.Session(profile_name="mypci")
+my_custom_ec2 = aws_dev_console.resource('ec2', region_name = cutom_region)
 
 if cutom_region == 'ap-south-1':
     relevantAMI = "ami-00a2ea0777b445307"
