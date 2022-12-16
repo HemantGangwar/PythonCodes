@@ -10,7 +10,7 @@ cutom_region = input('''Enter the region where you want to deploy?
                         
 _: ''') 
 
-aws_dev_console = boto3.session.Session(profile_name="mypci")
+aws_dev_console = boto3.session.Session(profile_name="default")
 my_custom_ec2 = aws_dev_console.resource('ec2', region_name = cutom_region)
 
 if cutom_region == 'ap-south-1':
